@@ -77,7 +77,7 @@ function delay(time) {
     }
 
 
-    const country_codes = ["AFG"];
+    const country_codes = ["ALB"];
     const years = range(2005, 2022);
 
     const products = [
