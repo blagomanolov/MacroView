@@ -1,0 +1,62 @@
+Database name: countries_db
+Postgres account: cap 
+Postgres password: cappac
+
+
+---------------------------------
+To delete the table:
+--------------------------------
+DELETE FROM countries;
+TRUNCATE TABLE countries;
+DROP TABLE countries;
+
+# To check all tables in the database
+\dt
+
+
+--------------------------------
+To create a database and tables:
+--------------------------------
+# See the database we have:
+\l
+
+# Switch to specific database
+\c database_name
+
+-------------------------------
+Connect to the postgresql:
+-------------------------------
+sudo -u postgres psql
+psql -U username -d database
+
+
+---------------------------------------------------------------------
+externalAPI1
+----------------------external API-------------PostgreSQL------------Internal API----------------(underconstruction UI)
+ExternalAPI2
+
+Backend -> Python (FastAPI, SQLAlchemy, Pydantic, Uvicorn)
+Frontend -> JS (React???)
+
+
+DOCKER
+--------------
+Already created docker files
+
+docker start -a fastapi_app
+
+
+
+
+----------------------
+WORKFLOW
+
+python fetch_countries.py
+python fetch_gdp.py
+
+- Then we can web scraping 
+node ...js files
+
+
+- After download the files
+python export_extract_to_db.py (for export download files)

@@ -1,0 +1,25 @@
+from fastapi import FastAPI
+from database import Base, engine
+from routers import countries, gdp, exports
+
+from fastapi.middleware.cors import CORSMiddleware
+
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Country API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:5173"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# Include routers
+app.include_router(countries.router)
+app.include_router(gdp.router)
+app.include_router(exports.router)
