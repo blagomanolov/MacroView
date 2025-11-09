@@ -6,6 +6,6 @@ information.txt
 
 backend/env
 
-docker-compose.yml
+backend/docker-compose.yml
 
-Dockerfile
+backend/Dockerfile
