@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime
 from database import Base
+from sqlalchemy.sql import func
 
 class Country(Base):
     __tablename__ = "countries"
@@ -32,7 +33,7 @@ class GDP(Base):
 class Export(Base):
     __tablename__ = 'exports'
     
-    index = Column(String, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     country_code = Column(String, index=True)
     country = Column(String)
     export_to = Column(String)
@@ -40,3 +41,25 @@ class Export(Base):
     year = Column(Integer, index=True)
     product = Column(String, index=True)
     export_value_usd_thousand = Column(Float, nullable=True)
+
+
+class Import(Base):
+    __tablename__ = 'imports'
+
+    id = Column(String, primary_key=True, index=True)
+    country_code = Column(String, index=True)
+    country = Column(String)
+    import_from =Column(String)
+    import_country_code = Column(String, nullable=True)
+    year = Column(Integer, index=True)
+    product = Column(String, index=True)
+    import_value_usd_thousand = Column(Float, nullable=True)
+
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@react-map/world": "^1.0.13",
+    "d3": "^7.9.0",
+    "d3-geo": "^3.1.1",
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.30.0",
+    "world-atlas": "^2.0.2"
+  }
+}

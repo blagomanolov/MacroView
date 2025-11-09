@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 class CountryBase(BaseModel):
@@ -54,7 +54,39 @@ class ExportCreate(ExportBase):
     pass
 
 class ExportResponse(ExportBase):
-    index: str
+    id: str
+
+    class Config:
+        orm_mode = True
+
+
+class ImportBase(BaseModel):
+    country_code: str
+    country: str
+    import_from: str
+    import_country_code: Optional[str] = None
+    year: int
+    product: str
+    import_value_usd_thousand: Optional[float] = None
+
+class ImportCreate(ImportBase):
+    pass
+
+class ImportResponse(ImportBase):
+    id: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
 
     class Config:
         orm_mode = True

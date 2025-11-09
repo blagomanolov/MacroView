@@ -88,10 +88,11 @@ function delay(time) {
     //     "TON", "TTO", "TUN", "TUR", "TKM", "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", "USA", "UMI", "URY",
     //     "UZB", "VUT", "VEN", "VNM", "VGB", "VIR", "WLF", "ESH", "YEM", "ZMB", "ZWE"
     // ];
-    const country_codes = ["AFG"]
+    // NEXT IS : CMR
+    const country_codes = ["CMR"]
 
 
-    const years = range(2005, 2024);
+    const years = range(2005, 2022);
 
     const products = [
         "01-05_Animal",

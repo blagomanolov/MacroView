@@ -2,3 +2,10 @@
 *.xls
 .env
 
+information.txt
+
+env
+
+docker-compose.yml
+
+Dockerfile
