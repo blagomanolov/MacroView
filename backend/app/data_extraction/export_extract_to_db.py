@@ -19,7 +19,7 @@ def get_country_code(country_name):
         }.get(country_name, None)
 
 
-download_dir = "../../../web_scraping/downloads_export"
+download_dir = "/downloads-export"
 file_paths = [
     os.path.join(download_dir, f) 
     for f in os.listdir(download_dir) 

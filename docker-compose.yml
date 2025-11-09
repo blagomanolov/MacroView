@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:15
+    container_name: countries_db
+    restart: always
+    environment:
+      POSTGRES_USER: cap
+      POSTGRES_PASSWORD: cappac
+      POSTGRES_DB: countries_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: ./backend
+    container_name: fastapi_app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://cap:cappac@db:5432/countries_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - downloads-export:/downloads-export      # shared folder for Excel files
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ./frontend-new/frontend
+    container_name: react_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-new/frontend:/app
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - web
+
+  puppeteer:
+    build:
+      context: ./web_scraping
+    container_name: puppeteer_app
+    depends_on:
+      - web
+    environment:
+      API_URL: http://web:8000
+    volumes:
+      - ./web_scraping:/app
+      - downloads-export:/downloads-export      # shared folder with backend
+    tty: true
+    command: ["tail", "-f", "/dev/null"]
+
+volumes:
+  postgres_data: {}
+  downloads-export: {}
