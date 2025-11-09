@@ -1,0 +1,4 @@
+- fetch the country - backend -> fetch_countries.py
+- fetch the gdp - backend -> fetch_gdp.py
+- scrapping export and import for all cointries -> web_scraping -> export and import js files
+- fill the database with export and import files -> backend -> data_extraction -> extract export and import py files
