@@ -1,10 +1,10 @@
 *.xlsx
 *.xls
-.env
+
 
 information.txt
 
-env
+backend/env
 
 docker-compose.yml
 
