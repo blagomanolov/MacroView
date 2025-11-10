@@ -11,6 +11,7 @@ import {
     Pie,
     Cell
 } from "recharts";
+import "./Dashboard.css";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A569BD", "#FF6384"];
 
@@ -250,159 +251,233 @@ export default function Dashboard({ onBack }) {
         : [];
 
     return (
-        <div style={{ padding: "1.5rem" }}>
-            <h2>Main Dashboard</h2>
-            <button onClick={onBack}>← Back</button>
-
-            {/* COUNTRY SELECT */}
-            <div style={{ marginTop: "1rem" }}>
-                <label htmlFor="country">Select Country:</label>
-                <select
-                    id="country"
-                    value={selectedCountry}
-                    onChange={(e) => setSelectedCountry(e.target.value)}
-                    style={{ marginLeft: "0.5rem", padding: "0.25rem" }}
-                >
-                    <option value="">-- Choose a country --</option>
-                    {countries.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                </select>
+        <div className="dashboard">
+            <div className="dashboard__header">
+                <button className="dashboard__back" onClick={onBack}>
+                    ← Back
+                </button>
+                <h2 className="dashboard__title">Main Dashboard</h2>
             </div>
 
-
-
-
-            {/* COUNTRY INFO */}
-            {countryInfo && (
-                <div style={{ marginTop: "2rem" }}>
-                    <h3>Country Information</h3>
-                    <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
-                        <tbody>
-                            <tr><th>Name</th><td>{countryInfo.name}</td></tr>
-                            <tr><th>Country Code</th><td>{countryInfo.country_code}</td></tr>
-                            <tr><th>Capital</th><td>{countryInfo.capital}</td></tr>
-                            <tr><th>Region</th><td>{countryInfo.region}</td></tr>
-                            <tr><th>Subregion</th><td>{countryInfo.subregion}</td></tr>
-                            <tr><th>Population</th><td>{countryInfo.population?.toLocaleString()}</td></tr>
-                            <tr><th>Area (km²)</th><td>{countryInfo.area?.toLocaleString()}</td></tr>
-                            <tr><th>Currency</th><td>{countryInfo.currency_name} ({countryInfo.currency_code})</td></tr>
-                            <tr><th>Language</th><td>{countryInfo.language}</td></tr>
-                            <tr><th>Independent</th><td>{countryInfo.indipendent ? "Yes" : "No"}</td></tr>
-                            <tr><th>Flag</th><td>{countryInfo.flag ? <img src={countryInfo.flag} alt="flag" style={{ width: "60px", border: "1px solid #ccc" }} /> : "No flag"}</td></tr>
-                        </tbody>
-                    </table>
+            <section className="card card--compact">
+                <div className="form-row">
+                    <label className="form-label" htmlFor="country">
+                        Select Country
+                    </label>
+                    <select
+                        id="country"
+                        value={selectedCountry}
+                        onChange={(e) => setSelectedCountry(e.target.value)}
+                        className="select"
+                    >
+                        <option value="">-- Choose a country --</option>
+                        {countries.map((c) => (
+                            <option key={c.id} value={c.name}>
+                                {c.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-            )}
+            </section>
 
-
-            {/* GDP TABLE */}
-            {gdpData.length > 0 && (
-                <div style={{ marginTop: "2rem" }}>
-                    <h3>GDP Table</h3>
-                    <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%", border: "#f9f9f9" }}>
-                        <thead>
-                            <tr><th>Year</th><th>GDP Value</th><th>Growth (%)</th><th>Currency</th></tr>
-                        </thead>
-                        <tbody>
-                            {displayedGdp.map((row, i) => (
-                                <tr key={i}>
-                                    <td>{row.year}</td>
-                                    <td>{row.gdp_value?.toLocaleString()}</td>
-                                    <td>{row.growth_percent}</td>
-                                    <td>{row.currency}</td>
+            {countryInfo && (
+                <section className="card">
+                    <h3 className="card__title">Country Information</h3>
+                    <div className="table-wrapper">
+                        <table className="data-table data-table--meta">
+                            <tbody>
+                                <tr><th>Name</th><td>{countryInfo.name}</td></tr>
+                                <tr><th>Country Code</th><td>{countryInfo.country_code}</td></tr>
+                                <tr><th>Capital</th><td>{countryInfo.capital}</td></tr>
+                                <tr><th>Region</th><td>{countryInfo.region}</td></tr>
+                                <tr><th>Subregion</th><td>{countryInfo.subregion}</td></tr>
+                                <tr><th>Population</th><td>{countryInfo.population?.toLocaleString()}</td></tr>
+                                <tr><th>Area (km²)</th><td>{countryInfo.area?.toLocaleString()}</td></tr>
+                                <tr><th>Currency</th><td>{countryInfo.currency_name} ({countryInfo.currency_code})</td></tr>
+                                <tr><th>Language</th><td>{countryInfo.language}</td></tr>
+                                <tr><th>Independent</th><td>{countryInfo.indipendent ? "Yes" : "No"}</td></tr>
+                                <tr>
+                                    <th>Flag</th>
+                                    <td>
+                                        {countryInfo.flag ? (
+                                            <img className="country-flag" src={countryInfo.flag} alt="flag" />
+                                        ) : (
+                                            "No flag"
+                                        )}
+                                    </td>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <div style={{ marginTop: "1rem", textAlign: "center" }}>
-                        <button onClick={() => setGdpPage(p => Math.max(1, p - 1))} disabled={gdpPage === 1}>← Prev</button>
-                        <span style={{ margin: "0 1rem" }}>Page {gdpPage} of {totalGdpPages}</span>
-                        <button onClick={() => setGdpPage(p => Math.min(totalGdpPages, p + 1))} disabled={gdpPage === totalGdpPages}>Next →</button>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+                </section>
             )}
 
-
-
-            {/* GDP CHART */}
-            {gdpChartDataLimited.length > 0 && (
-                <div style={{ marginTop: "2rem" }}>
-                    <h3>GDP Chart (Last 20 Years)</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={gdpChartDataLimited}>
-                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                            <XAxis dataKey="year" />
-                            <YAxis />
-                            <Tooltip formatter={(value) => value.toLocaleString()} />
-                            <Line type="monotone" dataKey="gdp" stroke="#8884d8" strokeWidth={2} dot={{ r: 3 }} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-            )}
-
-            {/* EXPORTS TABLE AND CHARTS */}
-            {countryInfo && (
-                <div style={{ marginTop: "2rem" }}>
-                    <h3>Export Data</h3>
-
-                    {/* FILTERS */}
-                    <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                        <div>
-                            <label>Year: </label>
-                            <select value={filters.year} onChange={(e) => setFilters({ ...filters, year: e.target.value })}>
-                                <option value="">All</option>
-                                {Array.from(new Set(exportData.map(e => e.year))).sort((a, b) => b - a).map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label>Export To: </label>
-                            <input type="text" placeholder="Search country..." value={filters.exportTo} onChange={(e) => setFilters({ ...filters, exportTo: e.target.value })} style={{ padding: "0.25rem" }} />
-                        </div>
-                        <div>
-                            <label>Product: </label>
-                            <input type="text" placeholder="Search product..." value={filters.product} onChange={(e) => setFilters({ ...filters, product: e.target.value })} style={{ padding: "0.25rem" }} />
-                        </div>
+            {gdpData.length > 0 && (
+                <section className="card">
+                    <div className="card__header">
+                        <h3 className="card__title">GDP Table</h3>
+                        <p className="card__subtitle">Showing {gdpPerPage} rows per page</p>
                     </div>
-
-                    {displayedExports.length > 0 ? (
-                        <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%", border: "#f1f1f1" }}>
+                    <div className="table-wrapper">
+                        <table className="data-table">
                             <thead>
                                 <tr>
-                                    <th onClick={() => requestSort("year")} style={{ cursor: "pointer" }}>Year {sortConfig.key === "year" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                    <th onClick={() => requestSort("export_to")} style={{ cursor: "pointer" }}>Export To {sortConfig.key === "export_to" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                    <th onClick={() => requestSort("product")} style={{ cursor: "pointer" }}>Product {sortConfig.key === "product" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                    <th onClick={() => requestSort("export_value_usd_thousand")} style={{ cursor: "pointer" }}>Value (USD Thousand) {sortConfig.key === "export_value_usd_thousand" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
+                                    <th>Year</th>
+                                    <th>GDP Value</th>
+                                    <th>Growth (%)</th>
+                                    <th>Currency</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {displayedExports.map((ex, i) => (
+                                {displayedGdp.map((row, i) => (
                                     <tr key={i}>
-                                        <td>{ex.year}</td>
-                                        <td>{ex.export_to}</td>
-                                        <td>{ex.product}</td>
-                                        <td>{ex.export_value_usd_thousand?.toLocaleString()}</td>
+                                        <td>{row.year}</td>
+                                        <td>{row.gdp_value?.toLocaleString()}</td>
+                                        <td>{row.growth_percent}</td>
+                                        <td>{row.currency}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    ) : <p>No export data available for this country.</p>}
+                    </div>
+                    <div className="pagination">
+                        <button className="btn" onClick={() => setGdpPage((p) => Math.max(1, p - 1))} disabled={gdpPage === 1}>
+                            ← Prev
+                        </button>
+                        <span className="pagination__info">
+                            Page {gdpPage} of {totalGdpPages}
+                        </span>
+                        <button className="btn" onClick={() => setGdpPage((p) => Math.min(totalGdpPages, p + 1))} disabled={gdpPage === totalGdpPages}>
+                            Next →
+                        </button>
+                    </div>
+                </section>
+            )}
 
-                    {/* EXPORT PAGINATION */}
+            {gdpChartDataLimited.length > 0 && (
+                <section className="card card--chart">
+                    <h3 className="card__title">GDP Chart (Last 20 Years)</h3>
+                    <ResponsiveContainer width="100%" height={320}>
+                        <LineChart data={gdpChartDataLimited}>
+                            <CartesianGrid stroke="#E5E7EB" strokeDasharray="8 6" />
+                            <XAxis dataKey="year" />
+                            <YAxis />
+                            <Tooltip formatter={(value) => value.toLocaleString()} />
+                            <Line type="monotone" dataKey="gdp" stroke="#6366F1" strokeWidth={2} dot={{ r: 3 }} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </section>
+            )}
+
+            {countryInfo && (
+                <section className="card">
+                    <div className="card__header">
+                        <h3 className="card__title">Export Data</h3>
+                        <p className="card__subtitle">Filter, explore and visualize export performance.</p>
+                    </div>
+
+                    <div className="filters">
+                        <div className="form-control">
+                            <label className="form-label">Year</label>
+                            <select className="select" value={filters.year} onChange={(e) => setFilters({ ...filters, year: e.target.value })}>
+                                <option value="">All</option>
+                                {Array.from(new Set(exportData.map((e) => e.year)))
+                                    .sort((a, b) => b - a)
+                                    .map((y) => (
+                                        <option key={y} value={y}>
+                                            {y}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+                        <div className="form-control">
+                            <label className="form-label">Export To</label>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Search country..."
+                                value={filters.exportTo}
+                                onChange={(e) => setFilters({ ...filters, exportTo: e.target.value })}
+                            />
+                        </div>
+                        <div className="form-control">
+                            <label className="form-label">Product</label>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Search product..."
+                                value={filters.product}
+                                onChange={(e) => setFilters({ ...filters, product: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    {displayedExports.length > 0 ? (
+                        <div className="table-wrapper">
+                            <table className="data-table data-table--interactive">
+                                <thead>
+                                    <tr>
+                                        <th onClick={() => requestSort("year")}>
+                                            Year{" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "year" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                        <th onClick={() => requestSort("export_to")}>
+                                            Export To{" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "export_to" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                        <th onClick={() => requestSort("product")}>
+                                            Product{" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "product" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                        <th onClick={() => requestSort("export_value_usd_thousand")}>
+                                            Value (USD Thousand){" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "export_value_usd_thousand" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {displayedExports.map((ex, i) => (
+                                        <tr key={i}>
+                                            <td>{ex.year}</td>
+                                            <td>{ex.export_to}</td>
+                                            <td>{ex.product}</td>
+                                            <td>{ex.export_value_usd_thousand?.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <p className="empty-state">No export data available for this country.</p>
+                    )}
+
                     {displayedExports.length > 0 && (
-                        <div style={{ marginTop: "1rem", textAlign: "center" }}>
-                            <button onClick={() => setExportPage(p => Math.max(1, p - 1))} disabled={exportPage === 1}>← Prev</button>
-                            <span style={{ margin: "0 1rem" }}>Page {exportPage} of {totalExportPages}</span>
-                            <button onClick={() => setExportPage(p => Math.min(totalExportPages, p + 1))} disabled={exportPage === totalExportPages}>Next →</button>
+                        <div className="pagination">
+                            <button className="btn" onClick={() => setExportPage((p) => Math.max(1, p - 1))} disabled={exportPage === 1}>
+                                ← Prev
+                            </button>
+                            <span className="pagination__info">
+                                Page {exportPage} of {totalExportPages}
+                            </span>
+                            <button className="btn" onClick={() => setExportPage((p) => Math.min(totalExportPages, p + 1))} disabled={exportPage === totalExportPages}>
+                                Next →
+                            </button>
                         </div>
                     )}
 
-                    {/* EXISTING PIE CHARTS */}
                     {filteredForCharts.length > 0 && (
-                        <div style={{ marginTop: "2rem", display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-                            <div style={{ flex: "1 1 300px" }}>
-                                <h4>Top 5 Destination Countries</h4>
-                                <ResponsiveContainer width="100%" height={300}>
+                        <div className="card-grid">
+                            <div className="card card--chart">
+                                <h4 className="card__title">Top 5 Destination Countries</h4>
+                                <ResponsiveContainer width="100%" height={280}>
                                     <PieChart>
                                         <Pie
                                             data={topCountriesData}
@@ -410,8 +485,8 @@ export default function Dashboard({ onBack }) {
                                             nameKey="name"
                                             cx="50%"
                                             cy="50%"
-                                            outerRadius={100}
-                                            fill="#8884d8"
+                                            outerRadius={110}
+                                            fill="#6366F1"
                                             label={(entry) => entry.name}
                                         >
                                             {topCountriesData.map((entry, index) => (
@@ -424,9 +499,9 @@ export default function Dashboard({ onBack }) {
                             </div>
 
                             {topProductsData.length > 0 && (
-                                <div style={{ flex: "1 1 300px" }}>
-                                    <h4>Top 5 Products</h4>
-                                    <ResponsiveContainer width="100%" height={300}>
+                                <div className="card card--chart">
+                                    <h4 className="card__title">Top 5 Products</h4>
+                                    <ResponsiveContainer width="100%" height={280}>
                                         <PieChart>
                                             <Pie
                                                 data={topProductsData}
@@ -434,8 +509,8 @@ export default function Dashboard({ onBack }) {
                                                 nameKey="name"
                                                 cx="50%"
                                                 cy="50%"
-                                                outerRadius={100}
-                                                fill="#82ca9d"
+                                                outerRadius={110}
+                                                fill="#10B981"
                                                 label={(entry) => entry.name}
                                             >
                                                 {topProductsData.map((entry, index) => (
@@ -450,126 +525,202 @@ export default function Dashboard({ onBack }) {
                         </div>
                     )}
 
-                    {/* NEW CUSTOM LINE CHART */}
                     {exportData.length > 0 && (
-                        <div style={{ marginTop: "2rem" }}>
-                            <h3>Custom Export Line Chart</h3>
+                        <div className="card card--chart">
+                            <div className="card__header">
+                                <h3 className="card__title">Custom Export Line Chart</h3>
+                                <p className="card__subtitle">Compare export performance for a specific partner and product.</p>
+                            </div>
 
-                            {/* DYNAMIC SELECTS */}
-                            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                                <div>
-                                    <label>Export To: </label>
-                                    <select value={selectedExportTo} onChange={(e) => setSelectedExportTo(e.target.value)}>
+                            <div className="filters filters--inline">
+                                <div className="form-control">
+                                    <label className="form-label">Export To</label>
+                                    <select className="select" value={selectedExportTo} onChange={(e) => setSelectedExportTo(e.target.value)}>
                                         <option value="">-- Select --</option>
-                                        {exportToOptions.map((c, i) => <option key={i} value={c}>{c}</option>)}
+                                        {exportToOptions.map((c, i) => (
+                                            <option key={i} value={c}>
+                                                {c}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
-                                <div>
-                                    <label>Product: </label>
-                                    <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
+                                <div className="form-control">
+                                    <label className="form-label">Product</label>
+                                    <select className="select" value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
                                         <option value="">-- Select --</option>
-                                        {productOptions.map((p, i) => <option key={i} value={p}>{p}</option>)}
+                                        {productOptions.map((p, i) => (
+                                            <option key={i} value={p}>
+                                                {p}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
 
-                            {/* LINE CHART */}
                             {exportLineChartData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={300}>
+                                <ResponsiveContainer width="100%" height={320}>
                                     <LineChart data={exportLineChartData}>
-                                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                                        <CartesianGrid stroke="#E5E7EB" strokeDasharray="8 6" />
                                         <XAxis dataKey="year" />
                                         <YAxis />
                                         <Tooltip formatter={(value) => value.toLocaleString()} />
-                                        <Line type="monotone" dataKey="value" stroke="#ff7300" strokeWidth={2} dot={{ r: 3 }} />
+                                        <Line type="monotone" dataKey="value" stroke="#F97316" strokeWidth={2} dot={{ r: 3 }} />
                                     </LineChart>
                                 </ResponsiveContainer>
                             ) : (
-                                selectedExportTo && selectedProduct && <p>No data for selected Export To and Product combination.</p>
+                                selectedExportTo &&
+                                selectedProduct && <p className="empty-state">No data for selected Export To and Product combination.</p>
                             )}
                         </div>
                     )}
-                </div>
+                </section>
             )}
-            {/* IMPORT TABLE */}
-            {countryInfo && (
-                <div style={{ marginTop: "2rem" }}>
-                    <h3>Import Data</h3>
 
-                    {/* FILTERS */}
-                    <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                        <div>
-                            <label>Year: </label>
-                            <select value={filtersI.year} onChange={(e) => setFiltersI({ ...filtersI, year: e.target.value })}>
+            {countryInfo && (
+                <section className="card">
+                    <div className="card__header">
+                        <h3 className="card__title">Import Data</h3>
+                        <p className="card__subtitle">Understand inbound trade partners and products.</p>
+                    </div>
+
+                    <div className="filters">
+                        <div className="form-control">
+                            <label className="form-label">Year</label>
+                            <select className="select" value={filtersI.year} onChange={(e) => setFiltersI({ ...filtersI, year: e.target.value })}>
                                 <option value="">All</option>
-                                {Array.from(new Set(importData.map(e => e.year))).sort((a, b) => b - a).map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
+                                {Array.from(new Set(importData.map((e) => e.year)))
+                                    .sort((a, b) => b - a)
+                                    .map((y) => (
+                                        <option key={y} value={y}>
+                                            {y}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
-                        <div>
-                            <label>Import From: </label>
-                            <input type="text" placeholder="Search country..." value={filtersI.importTo} onChange={(e) => setFiltersI({ ...filtersI, importTo: e.target.value })} style={{ padding: "0.25rem" }} />
+                        <div className="form-control">
+                            <label className="form-label">Import From</label>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Search country..."
+                                value={filtersI.importTo}
+                                onChange={(e) => setFiltersI({ ...filtersI, importTo: e.target.value })}
+                            />
                         </div>
-                        <div>
-                            <label>Product: </label>
-                            <input type="text" placeholder="Search product..." value={filtersI.product} onChange={(e) => setFiltersI({ ...filtersI, product: e.target.value })} style={{ padding: "0.25rem" }} />
+                        <div className="form-control">
+                            <label className="form-label">Product</label>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Search product..."
+                                value={filtersI.product}
+                                onChange={(e) => setFiltersI({ ...filtersI, product: e.target.value })}
+                            />
                         </div>
                     </div>
 
                     {displayedImport.length > 0 ? (
-                        <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%", border: "#f1f1f1" }}>
-                            <thead>
-                                <tr>
-                                    <th onClick={() => requestSortI("year")} style={{ cursor: "pointer" }}>Year {sortConfig.key === "year" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                    <th onClick={() => requestSortI("import_from")} style={{ cursor: "pointer" }}>Import From {sortConfig.key === "import_from" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                    <th onClick={() => requestSortI("product")} style={{ cursor: "pointer" }}>Product {sortConfig.key === "product" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                    <th onClick={() => requestSortI("import_value_usd_thousand")} style={{ cursor: "pointer" }}>Value (USD Thousand) {sortConfig.key === "import_value_usd_thousand" ? sortConfig.direction === "asc" ? "↑" : "↓" : ""}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {displayedImport.map((ex, i) => (
-                                    <tr key={i}>
-                                        <td>{ex.year}</td>
-                                        <td>{ex.import_from}</td>
-                                        <td>{ex.product}</td>
-                                        <td>{ex.import_value_usd_thousand?.toLocaleString()}</td>
+                        <div className="table-wrapper">
+                            <table className="data-table data-table--interactive">
+                                <thead>
+                                    <tr>
+                                        <th onClick={() => requestSortI("year")}>
+                                            Year{" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "year" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                        <th onClick={() => requestSortI("import_from")}>
+                                            Import From{" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "import_from" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                        <th onClick={() => requestSortI("product")}>
+                                            Product{" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "product" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
+                                        <th onClick={() => requestSortI("import_value_usd_thousand")}>
+                                            Value (USD Thousand){" "}
+                                            <span className="sort-indicator">
+                                                {sortConfig.key === "import_value_usd_thousand" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}
+                                            </span>
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : <p>No import data available for this country.</p>}
+                                </thead>
+                                <tbody>
+                                    {displayedImport.map((ex, i) => (
+                                        <tr key={i}>
+                                            <td>{ex.year}</td>
+                                            <td>{ex.import_from}</td>
+                                            <td>{ex.product}</td>
+                                            <td>{ex.import_value_usd_thousand?.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <p className="empty-state">No import data available for this country.</p>
+                    )}
 
-                    {/* EXPORT PAGINATION */}
                     {displayedImport.length > 0 && (
-                        <div style={{ marginTop: "1rem", textAlign: "center" }}>
-                            <button onClick={() => setImportPage(p => Math.max(1, p - 1))} disabled={importPage === 1}>← Prev</button>
-                            <span style={{ margin: "0 1rem" }}>Page {importPage} of {totalImportPages}</span>
-                            <button onClick={() => setImportPage(p => Math.min(totalImportPages, p + 1))} disabled={importPage === totalImportPages}>Next →</button>
+                        <div className="pagination">
+                            <button className="btn" onClick={() => setImportPage((p) => Math.max(1, p - 1))} disabled={importPage === 1}>
+                                ← Prev
+                            </button>
+                            <span className="pagination__info">
+                                Page {importPage} of {totalImportPages}
+                            </span>
+                            <button className="btn" onClick={() => setImportPage((p) => Math.min(totalImportPages, p + 1))} disabled={importPage === totalImportPages}>
+                                Next →
+                            </button>
                         </div>
                     )}
 
-                    {/* IMPORTS CHARTS */}
                     {filteredForChartsI.length > 0 && (
-                        <div style={{ marginTop: "2rem" }}>
-                            <h3>Imports Charts</h3>
-                            <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-                                {/* PIE CHART 1: Top 5 Destination Countries */}
-                                <div style={{ flex: "1 1 300px" }}>
-                                    <h4>Top 5 Countries</h4>
-                                    <ResponsiveContainer width="100%" height={300}>
+                        <div className="card-grid">
+                            <div className="card card--chart">
+                                <h4 className="card__title">Top 5 Countries</h4>
+                                <ResponsiveContainer width="100%" height={280}>
+                                    <PieChart>
+                                        <Pie
+                                            data={topCountriesDataI}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={110}
+                                            fill="#6366F1"
+                                            label={(entry) => entry.name}
+                                        >
+                                            {topCountriesDataI.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip formatter={(value) => value.toLocaleString()} />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+
+                            {topProductsDataI.length > 0 && (
+                                <div className="card card--chart">
+                                    <h4 className="card__title">Top 5 Products</h4>
+                                    <ResponsiveContainer width="100%" height={280}>
                                         <PieChart>
                                             <Pie
-                                                data={topCountriesDataI}
+                                                data={topProductsDataI}
                                                 dataKey="value"
                                                 nameKey="name"
                                                 cx="50%"
                                                 cy="50%"
-                                                outerRadius={100}
-                                                fill="#8884d8"
+                                                outerRadius={110}
+                                                fill="#10B981"
                                                 label={(entry) => entry.name}
                                             >
-                                                {topCountriesDataI.map((entry, index) => (
+                                                {topProductsDataI.map((entry, index) => (
                                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                                 ))}
                                             </Pie>
@@ -577,76 +728,59 @@ export default function Dashboard({ onBack }) {
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
-
-                                {/* PIE CHART 2: Top 5 Products */}
-                                {topProductsDataI.length > 0 && (
-                                    <div style={{ flex: "1 1 300px" }}>
-                                        <h4>Top 5 Products</h4>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <PieChart>
-                                                <Pie
-                                                    data={topProductsDataI}
-                                                    dataKey="value"
-                                                    nameKey="name"
-                                                    cx="50%"
-                                                    cy="50%"
-                                                    outerRadius={100}
-                                                    fill="#82ca9d"
-                                                    label={(entry) => entry.name}
-                                                >
-                                                    {topProductsDataI.map((entry, index) => (
-                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                    ))}
-                                                </Pie>
-                                                <Tooltip formatter={(value) => value.toLocaleString()} />
-                                            </PieChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                    {/* NEW CUSTOM LINE CHART */}
-                    {importData.length > 0 && (
-                        <div style={{ marginTop: "2rem" }}>
-                            <h3>Custom Import Line Chart</h3>
-
-                            {/* DYNAMIC SELECTS */}
-                            <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                                <div>
-                                    <label>Import From: </label>
-                                    <select value={selectedImportTo} onChange={(e) => setSelectedImportTo(e.target.value)}>
-                                        <option value="">-- Select --</option>
-                                        {importToOptions.map((c, i) => <option key={i} value={c}>{c}</option>)}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>Product: </label>
-                                    <select value={selectedProductI} onChange={(e) => setSelectedProductI(e.target.value)}>
-                                        <option value="">-- Select --</option>
-                                        {productOptions.map((p, i) => <option key={i} value={p}>{p}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* LINE CHART */}
-                            {importLineChartData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <LineChart data={importLineChartData}>
-                                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                                        <XAxis dataKey="year" />
-                                        <YAxis />
-                                        <Tooltip formatter={(value) => value.toLocaleString()} />
-                                        <Line type="monotone" dataKey="value" stroke="#ff7300" strokeWidth={2} dot={{ r: 3 }} />
-                                    </LineChart>
-                                </ResponsiveContainer>
-                            ) : (
-                                selectedExportTo && selectedProduct && <p>No data for selected Import To and Product combination.</p>
                             )}
                         </div>
                     )}
 
-                </div>
+                    {importData.length > 0 && (
+                        <div className="card card--chart">
+                            <div className="card__header">
+                                <h3 className="card__title">Custom Import Line Chart</h3>
+                                <p className="card__subtitle">Track products sourced from a specific partner over time.</p>
+                            </div>
+
+                            <div className="filters filters--inline">
+                                <div className="form-control">
+                                    <label className="form-label">Import From</label>
+                                    <select className="select" value={selectedImportTo} onChange={(e) => setSelectedImportTo(e.target.value)}>
+                                        <option value="">-- Select --</option>
+                                        {importToOptions.map((c, i) => (
+                                            <option key={i} value={c}>
+                                                {c}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="form-control">
+                                    <label className="form-label">Product</label>
+                                    <select className="select" value={selectedProductI} onChange={(e) => setSelectedProductI(e.target.value)}>
+                                        <option value="">-- Select --</option>
+                                        {productOptionsI.map((p, i) => (
+                                            <option key={i} value={p}>
+                                                {p}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {importLineChartData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height={320}>
+                                    <LineChart data={importLineChartData}>
+                                        <CartesianGrid stroke="#E5E7EB" strokeDasharray="8 6" />
+                                        <XAxis dataKey="year" />
+                                        <YAxis />
+                                        <Tooltip formatter={(value) => value.toLocaleString()} />
+                                        <Line type="monotone" dataKey="value" stroke="#F97316" strokeWidth={2} dot={{ r: 3 }} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                selectedImportTo &&
+                                selectedProductI && <p className="empty-state">No data for selected Import To and Product combination.</p>
+                            )}
+                        </div>
+                    )}
+                </section>
             )}
         </div>
     );

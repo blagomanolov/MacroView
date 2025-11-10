@@ -98,7 +98,7 @@ function delay(time) {
     // "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO", "TUN", "TUR", "TKM",
     // "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", "USA", "UMI", "URY", "UZB", "VUT", "VEN",
     // "VNM", "VGB", "VIR", "WLF", "ESH", "YEM", "ZMB", "ZWE"];
-    const country_codes = ["AFG"];
+    const country_codes = ["DZA"];
     const years = range(2005, 2022);
 
     const products = [
