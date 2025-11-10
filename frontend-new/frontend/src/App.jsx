@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import AuthenticatedView from "./components/AuthenticatedView";
+import "./App.css";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
