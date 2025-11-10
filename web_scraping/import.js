@@ -12,7 +12,7 @@ async function downloadFile(page, url, downloadPath, newFileName) {
     });
 
     await page.goto(url, { waitUntil: 'load' });
-    console.log(`Navigated to: ${url}`);
+    console.log(`🔗 Navigated to: ${url}`);
 
     await page.waitForSelector('#DataDownload', { timeout: 15000 });
     await page.click('#DataDownload');
@@ -20,11 +20,11 @@ async function downloadFile(page, url, downloadPath, newFileName) {
     await page.waitForSelector('ul#dropDownFileFormat li.excel a', { timeout: 15000 });
     await page.click('ul#dropDownFileFormat li.excel a');
 
-    console.log(`Triggered download for: ${newFileName}`);
+    console.log(`✅ Triggered download for: ${newFileName}`);
 
     const fileName = await waitForDownload(downloadPath, '.xlsx');
     fs.renameSync(path.join(downloadPath, fileName), path.join(downloadPath, newFileName));
-    console.log(`Downloaded and renamed to: ${newFileName}`);
+    console.log(`📁 Downloaded and renamed to: ${newFileName}`);
 }
 
 const waitForDownload = async (dir, ext) => {
@@ -58,7 +58,9 @@ function delay(time) {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
+
     const downloadPath = '/downloads-import';
+
 
     if (fs.existsSync(downloadPath)) {
         const files = fs.readdirSync(downloadPath);
@@ -67,7 +69,7 @@ function delay(time) {
             try {
                 fs.rmSync(filePath, { recursive: true, force: true });
             } catch (err) {
-                console.warn(`Could not delete ${filePath}: ${err.message}`);
+                console.warn(`⚠️ Could not delete ${filePath}: ${err.message}`);
             }
         }
     } else {
@@ -126,5 +128,5 @@ function delay(time) {
     }
 
     await browser.close();
-    console.log("All files downloaded and saved to /downloads-export!");
+    console.log("✅ All files downloaded and saved to /downloads-export!");
 })();
