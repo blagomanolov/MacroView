@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Dashboard from "./Dashboard"; // we’ll create this next
+import Dashboard from "./Dashboard"; 
 
 export default function AuthenticatedView({ user, onLogout }) {
   const [protectedData, setProtectedData] = useState(null);

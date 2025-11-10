@@ -5,14 +5,13 @@ from routers import countries, gdp, exports, user, imports
 from fastapi.middleware.cors import CORSMiddleware
 
 
-# Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Country API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["http://localhost:5173"]
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

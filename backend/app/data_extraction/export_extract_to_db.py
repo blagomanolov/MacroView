@@ -7,6 +7,16 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from database import engine
 
 def get_country_code(country_name):
+    """
+    Resolve a country name to its ISO alpha-2 country code.
+    Falls back to a small manual mapping for names not covered by pycountry.
+
+    Args:
+        country_name (str): Human-readable country name.
+
+    Returns:
+        str | None: ISO alpha-2 code if found, otherwise None.
+    """
     try:
         return pycountry.countries.get(name=country_name).alpha_2
     except:

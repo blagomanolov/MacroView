@@ -1,8 +1,10 @@
+"""SQLAlchemy ORM models for countries, GDP, trade data, and users."""
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime
 from database import Base
 from sqlalchemy.sql import func
 
 class Country(Base):
+    """Country metadata including codes, demographics, currency, and language."""
     __tablename__ = "countries"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -21,6 +23,7 @@ class Country(Base):
 
 
 class GDP(Base):
+    """Gross Domestic Product records per country and year."""
     __tablename__ = "gdp"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -31,6 +34,7 @@ class GDP(Base):
     currency = Column(String, default="US$")
 
 class Export(Base):
+    """Export data by product, partner country, year, and values."""
     __tablename__ = 'exports'
     
     id = Column(String, primary_key=True, index=True)
@@ -44,6 +48,7 @@ class Export(Base):
 
 
 class Import(Base):
+    """Import data by product, partner country, year, and values."""
     __tablename__ = 'imports'
 
     id = Column(String, primary_key=True, index=True)
@@ -57,6 +62,7 @@ class Import(Base):
 
 
 class User(Base):
+    """Application user accounts with hashed credentials and timestamps."""
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)

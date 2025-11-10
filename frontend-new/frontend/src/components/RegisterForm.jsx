@@ -25,7 +25,7 @@ export default function RegisterForm({ onRegister, onSwitchToLogin }) {
         throw new Error("Failed to register");
       }
 
-      // Automatically log in after successful registration
+
       const data = await response.json();
       onRegister(data);
 

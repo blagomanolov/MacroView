@@ -12,7 +12,7 @@ async function downloadFile(page, url, downloadPath, newFileName) {
     });
 
     await page.goto(url, { waitUntil: 'load' });
-    console.log(`🔗 Navigated to: ${url}`);
+    console.log(`Navigated to: ${url}`);
 
     await page.waitForSelector('#DataDownload', { timeout: 15000 });
     await page.click('#DataDownload');
@@ -20,11 +20,11 @@ async function downloadFile(page, url, downloadPath, newFileName) {
     await page.waitForSelector('ul#dropDownFileFormat li.excel a', { timeout: 15000 });
     await page.click('ul#dropDownFileFormat li.excel a');
 
-    console.log(`✅ Triggered download for: ${newFileName}`);
+    console.log(`Triggered download for: ${newFileName}`);
 
     const fileName = await waitForDownload(downloadPath, '.xlsx');
     fs.renameSync(path.join(downloadPath, fileName), path.join(downloadPath, newFileName));
-    console.log(`📁 Downloaded and renamed to: ${newFileName}`);
+    console.log(`Downloaded and renamed to: ${newFileName}`);
 }
 
 const waitForDownload = async (dir, ext) => {
@@ -58,10 +58,8 @@ function delay(time) {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
-    // ✅ Use the shared volume folder inside the container
     const downloadPath = '/downloads-export';
 
-    // Clean up contents but keep the folder (because it's a mounted volume)
     if (fs.existsSync(downloadPath)) {
         const files = fs.readdirSync(downloadPath);
         for (const file of files) {
@@ -69,7 +67,7 @@ function delay(time) {
             try {
                 fs.rmSync(filePath, { recursive: true, force: true });
             } catch (err) {
-                console.warn(`⚠️ Could not delete ${filePath}: ${err.message}`);
+                console.warn(`Could not delete ${filePath}: ${err.message}`);
             }
         }
     } else {
@@ -77,27 +75,29 @@ function delay(time) {
     }
 
 
-    const country_codes = ["AFG", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA", "ATG", "ARG", "ARM", "ABW",
-    "AUS", "AUT", "AZE", "BHS", "BHR", "BGD", "BRB", "BLR", "BEL", "BLZ", "BEN", "BMU",
-    "BTN", "BOL", "BES", "BIH", "BWA", "BVT", "BRA", "IOT", "BRN", "BGR", "BFA", "BDI",
-    "KHM", "CMR", "CAN", "CPV", "CYM", "CAF", "TCD", "CHL", "CHN", "CXR", "CCK", "COL",
-    "COM", "COG", "COD", "COK", "CRI", "CIV", "HRV", "CUB", "CUW", "CYP", "CZE", "DNK",
-    "DJI", "DMA", "DOM", "ECU", "EGY", "SLV", "GNQ", "ERI", "EST", "SWZ", "ETH", "FLK",
-    "FRO", "FJI", "FIN", "FRA", "GUF", "PYF", "ATF", "GAB", "GMB", "GEO", "DEU", "GHA",
-    "GIB", "GRC", "GRL", "GRD", "GLP", "GUM", "GTM", "GGY", "GIN", "GNB", "GUY", "HTI",
-    "HMD", "VAT", "HND", "HKG", "HUN", "ISL", "IND", "IDN", "IRN", "IRQ", "IRL", "IMN",
-    "ISR", "ITA", "JAM", "JPN", "JEY", "JOR", "KAZ", "KEN", "KIR", "PRK", "KOR", "KWT",
-    "KGZ", "LAO", "LVA", "LBN", "LSO", "LBR", "LBY", "LIE", "LTU", "LUX", "MAC", "MDG",
-    "MWI", "MYS", "MDV", "MLI", "MLT", "MHL", "MTQ", "MRT", "MUS", "MYT", "MEX", "FSM",
-    "MDA", "MCO", "MNG", "MNE", "MSR", "MAR", "MOZ", "MMR", "NAM", "NRU", "NPL", "NLD",
-    "NCL", "NZL", "NIC", "NER", "NGA", "NIU", "NFK", "MKD", "MNP", "NOR", "OMN", "PAK",
-    "PLW", "PSE", "PAN", "PNG", "PRY", "PER", "PHL", "PCN", "POL", "PRT", "PRI", "QAT",
-    "REU", "ROU", "RUS", "RWA", "BLM", "SHN", "KNA", "LCA", "MAF", "SPM", "VCT", "WSM",
-    "SMR", "STP", "SAU", "SEN", "SRB", "SYC", "SLE", "SGP", "SXM", "SVK", "SVN", "SLB",
-    "SOM", "ZAF", "SGS", "SSD", "ESP", "LKA", "SDN", "SUR", "SJM", "SWE", "CHE", "SYR",
-    "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO", "TUN", "TUR", "TKM",
-    "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", "USA", "UMI", "URY", "UZB", "VUT", "VEN",
-    "VNM", "VGB", "VIR", "WLF", "ESH", "YEM", "ZMB", "ZWE"];
+    // const country_codes = ["AFG", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA", "ATG", "ARG", "ARM", "ABW",
+    // "AUS", "AUT", "AZE", "BHS", "BHR", "BGD", "BRB", "BLR", "BEL", "BLZ", "BEN", "BMU",
+    // "BTN", "BOL", "BES", "BIH", "BWA", "BVT", "BRA", "IOT", "BRN", "BGR", "BFA", "BDI",
+    // "KHM", "CMR", "CAN", "CPV", "CYM", "CAF", "TCD", "CHL", "CHN", "CXR", "CCK", "COL",
+    // "COM", "COG", "COD", "COK", "CRI", "CIV", "HRV", "CUB", "CUW", "CYP", "CZE", "DNK",
+    // "DJI", "DMA", "DOM", "ECU", "EGY", "SLV", "GNQ", "ERI", "EST", "SWZ", "ETH", "FLK",
+    // "FRO", "FJI", "FIN", "FRA", "GUF", "PYF", "ATF", "GAB", "GMB", "GEO", "DEU", "GHA",
+    // "GIB", "GRC", "GRL", "GRD", "GLP", "GUM", "GTM", "GGY", "GIN", "GNB", "GUY", "HTI",
+    // "HMD", "VAT", "HND", "HKG", "HUN", "ISL", "IND", "IDN", "IRN", "IRQ", "IRL", "IMN",
+    // "ISR", "ITA", "JAM", "JPN", "JEY", "JOR", "KAZ", "KEN", "KIR", "PRK", "KOR", "KWT",
+    // "KGZ", "LAO", "LVA", "LBN", "LSO", "LBR", "LBY", "LIE", "LTU", "LUX", "MAC", "MDG",
+    // "MWI", "MYS", "MDV", "MLI", "MLT", "MHL", "MTQ", "MRT", "MUS", "MYT", "MEX", "FSM",
+    // "MDA", "MCO", "MNG", "MNE", "MSR", "MAR", "MOZ", "MMR", "NAM", "NRU", "NPL", "NLD",
+    // "NCL", "NZL", "NIC", "NER", "NGA", "NIU", "NFK", "MKD", "MNP", "NOR", "OMN", "PAK",
+    // "PLW", "PSE", "PAN", "PNG", "PRY", "PER", "PHL", "PCN", "POL", "PRT", "PRI", "QAT",
+    // "REU", "ROU", "RUS", "RWA", "BLM", "SHN", "KNA", "LCA", "MAF", "SPM", "VCT", "WSM",
+    // "SMR", "STP", "SAU", "SEN", "SRB", "SYC", "SLE", "SGP", "SXM", "SVK", "SVN", "SLB",
+    // "SOM", "ZAF", "SGS", "SSD", "ESP", "LKA", "SDN", "SUR", "SJM", "SWE", "CHE", "SYR",
+    // "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO", "TUN", "TUR", "TKM",
+    // "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", "USA", "UMI", "URY", "UZB", "VUT", "VEN",
+    // "VNM", "VGB", "VIR", "WLF", "ESH", "YEM", "ZMB", "ZWE"];
+
+    const country_codes = ["AFG"];
     const years = range(2005, 2022);
 
     const products = [
@@ -127,5 +127,5 @@ function delay(time) {
     }
 
     await browser.close();
-    console.log("✅ All files downloaded and saved to /downloads-export!");
+    console.log("All files downloaded and saved to /downloads-export!");
 })();

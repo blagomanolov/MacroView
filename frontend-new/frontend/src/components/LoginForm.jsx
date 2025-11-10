@@ -7,9 +7,8 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare data in application/x-www-form-urlencoded format
     const formData = new URLSearchParams({
-      username: email, // OAuth2PasswordRequestForm uses "username" field
+      username: email, 
       password: password,
     });
 
@@ -29,7 +28,7 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
 
       const data = await response.json();
       localStorage.setItem("token", data.access_token);
-      onLogin(data.user); // Pass user info back to the parent
+      onLogin(data.user);
     } catch (error) {
       alert("Login failed: " + error.message);
     }
